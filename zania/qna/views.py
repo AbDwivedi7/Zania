@@ -20,9 +20,12 @@ class QnaBotAPIView(APIView):
                 return Response({"error": "content file is required"}, status=status.HTTP_400_BAD_REQUEST)
             
             questions = request.FILES['questions']
-            parsed_questions_file = json.load(questions)
-            # print(parsed_questions_file)
             content = request.FILES['content']
+            
+            if questions.name.split('.')[1] != 'json' or content.name.split('.')[1] != 'pdf':
+                return Response({"error": "Unsupported file type"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            parsed_questions_file = json.load(questions)
             parsed_content_file = parse_pdf_file(content)
             
             answers = get_open_ai_answer(documents=parsed_content_file, questions=parsed_questions_file)
