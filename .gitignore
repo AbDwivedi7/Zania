@@ -1,3 +1,4 @@
 *.env
-*.pyc
+*.py[cod]
 questions.json
+__pycache__/
