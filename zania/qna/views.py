@@ -9,21 +9,23 @@ from rest_framework.permissions import IsAuthenticated
 from zania.qna.utils import parse_pdf_file, parse_json_file
 from zania.qna.openai import get_open_ai_answer
 
+# View for QNA
 class QnaBotAPIView(APIView):
     parser_classes = (MultiPartParser,)
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
         try:
-            if 'questions' not in request.FILES:
+            if 'questions' not in request.FILES: # Check if questions file does not exist
                 return Response({"error": "questions file is required"}, status=status.HTTP_400_BAD_REQUEST)
             
-            if 'content' not in request.FILES:
+            if 'content' not in request.FILES: # Check if content file does not exist
                 return Response({"error": "content file is required"}, status=status.HTTP_400_BAD_REQUEST)
             
             questions = request.FILES['questions']
             content = request.FILES['content']
             
+            # Check for hte file type
             if questions.name.split('.')[1] != 'json' or (content.name.split('.')[1] != 'pdf' and content.name.split('.')[1] != 'json'):
                 return Response({"error": "Unsupported file type"}, status=status.HTTP_400_BAD_REQUEST)
             

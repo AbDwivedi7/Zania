@@ -16,6 +16,11 @@ Start the Server:
 python manage.py runserver
 ```
 
+Run the Tests:
+```sh
+python manage.py test
+```
+
 ## Authentication
 
 This project uses JWT for authentication
@@ -38,8 +43,10 @@ This project uses JWT for authentication
 
 
 ## Rate Limiting
-For Anonymous User     : 100 Request per minute
-For Authenticated User : 10 Request per minute
+
+Anonymous User     : 100 Request per minute
+
+Authenticated User : 10 Request per minute
 
 
 ## License

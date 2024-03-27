@@ -18,6 +18,6 @@ Including another URLconf
 from django.urls import path, include
 
 urlpatterns = [
-    path('api/qna/', include('zania.qna.urls')),
-    path('api/tokens/', include('zania.tokens.urls')),
+    path('api/qna/', include('zania.qna.urls')), # Url for QNA
+    path('api/tokens/', include('zania.tokens.urls')), # Url for Authentication
 ]
