@@ -6,7 +6,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from zania.qna.utils import parse_pdf_file
+from zania.qna.utils import parse_pdf_file, parse_json_file
 from zania.qna.openai import get_open_ai_answer
 
 class QnaBotAPIView(APIView):
@@ -32,7 +32,7 @@ class QnaBotAPIView(APIView):
             if content.name.split('.')[1] == 'pdf':
                 parsed_content_file = parse_pdf_file(content)
             else:
-                parsed_content_file = json.load(content)
+                parsed_content_file = parse_json_file(content)
             
             answers = get_open_ai_answer(documents=parsed_content_file, questions=parsed_questions_file)
             
