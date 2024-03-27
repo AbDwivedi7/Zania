@@ -5,5 +5,5 @@ from zania.qna.views import (
 )
 
 urlpatterns = [
-    path('bot/qna', QnaBotAPIView.as_view(), name="QNA View"),
+    path('bot', QnaBotAPIView.as_view(), name="QNA View"),
 ]

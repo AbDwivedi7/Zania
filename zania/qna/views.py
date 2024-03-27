@@ -4,12 +4,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from zania.qna.utils import parse_pdf_file
 from zania.qna.openai import get_open_ai_answer
 
 class QnaBotAPIView(APIView):
     parser_classes = (MultiPartParser,)
+    permission_classes = [IsAuthenticated]
     
     def post(self, request):
         try:
@@ -22,11 +24,15 @@ class QnaBotAPIView(APIView):
             questions = request.FILES['questions']
             content = request.FILES['content']
             
-            if questions.name.split('.')[1] != 'json' or content.name.split('.')[1] != 'pdf':
+            if questions.name.split('.')[1] != 'json' or (content.name.split('.')[1] != 'pdf' and content.name.split('.')[1] != 'json'):
                 return Response({"error": "Unsupported file type"}, status=status.HTTP_400_BAD_REQUEST)
             
             parsed_questions_file = json.load(questions)
-            parsed_content_file = parse_pdf_file(content)
+            
+            if content.name.split('.')[1] == 'pdf':
+                parsed_content_file = parse_pdf_file(content)
+            else:
+                parsed_content_file = json.load(content)
             
             answers = get_open_ai_answer(documents=parsed_content_file, questions=parsed_questions_file)
             
